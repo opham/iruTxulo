@@ -1,4 +1,4 @@
-import visit from './visitReducer.js';
+import visit from './visitReducer';
 
 const reducers = {
     visit

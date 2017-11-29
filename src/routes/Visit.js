@@ -3,15 +3,15 @@
  */
 
 import React from 'react';
-import PropTypes  from 'prop-types';
+// import PropTypes from 'prop-types';
 
 class Visit extends React.Component {
-    constructor(props) {
-        super(props);
-
-        // this.state = {
-        // };
-    }
+    // constructor(props) {
+    //     super(props);
+    //
+    //     // this.state = {
+    //     // };
+    // }
 
     render() {
         console.info('-->> Visit renders', this.props);
@@ -19,7 +19,7 @@ class Visit extends React.Component {
             <h1>Visit</h1>
         );
     }
-};
+}
 
 Visit.defaultProps = {
 };

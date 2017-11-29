@@ -3,15 +3,15 @@
  */
 
 import React from 'react';
-import PropTypes  from 'prop-types';
+// import PropTypes from 'prop-types';
 
 class Home extends React.Component {
-    constructor(props) {
-        super(props);
-
-        // this.state = {
-        // };
-    }
+    // constructor(props) {
+    //     super(props);
+    //
+    //     // this.state = {
+    //     // };
+    // }
 
     render() {
         console.info('-->> Home renders', this.props);
@@ -19,7 +19,7 @@ class Home extends React.Component {
             <h1>Home</h1>
         );
     }
-};
+}
 
 Home.defaultProps = {
 };
