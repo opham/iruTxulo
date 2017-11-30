@@ -1,8 +1,11 @@
 import React from 'react';
 import {createStore, combineReducers} from 'redux';
 import {Provider} from 'react-redux';
-import {BrowserRouter as Router, Route, Switch, Link} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import reducers from './reducers';
+
+/* components */
+import Menu from './components/Menu';
 
 /* routes */
 import Home from './routes/Home';
@@ -19,12 +22,7 @@ export default class App extends React.Component {
             <Provider store={store}>
                 <Router>
                     <div>
-                        <ul>
-                            <li><Link to="/">Home</Link></li>
-                            <li><Link to="/about">About</Link></li>
-                            <li><Link to="/visit">Visit</Link></li>
-                        </ul>
-                        <hr />
+                        <Menu />
                         <Switch>
                             <Route exact path="/" component={Home} />
                             <Route path="/about" component={About} />

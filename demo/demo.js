@@ -1,6 +1,6 @@
 import React from 'react';
 import App from '../src'
-import demoCSS from './scss/demo.scss';
+import './scss/demo.scss';
 
 
 class Demo extends React.Component {

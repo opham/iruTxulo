@@ -1,0 +1,40 @@
+html {
+  font-family: $primary-font;
+  font-size: $font-size;
+  color: $black;
+}
+
+html,
+body {
+  height: 100%;
+  min-height: 100%;
+}
+
+
+body {
+  font-size: $font-size-sm;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+li {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: $red;
+  &:hover {
+    color: $green;
+  }
+}
+
+#root {
+  > div {
+    height: 100%;
+  }
+}
