@@ -37,4 +37,11 @@ a {
   > div {
     height: 100%;
   }
+
+
+  @include mobile {
+    .page {
+      padding-top: 50px;
+    }
+  }
 }
