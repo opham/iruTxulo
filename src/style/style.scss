@@ -6,8 +6,16 @@
 @import './core/colours';
 @import './core/variables';
 @import './core/mixins';
+@import './core/animations';
 @import './core/fonts';
 @import './core/normalize';
 
 /* component styles */
 @import './components/menu';
+@import './components/card';
+@import './components/slider';
+@import './components/frameMovie';
+
+/* routes styles */
+@import './routes/home';
+@import './routes/about';

@@ -1,0 +1,22 @@
+.slider {
+  .slides {
+    display: flex;
+    position: relative;
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      opacity: 0;
+      transition: opacity $duration-md;
+
+      &.active {
+        opacity: 1;
+      }
+    }
+  }
+}

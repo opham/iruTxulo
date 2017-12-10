@@ -1,0 +1,24 @@
+.card {
+  position: absolute;
+  z-index: 1;
+  max-width: 50%;
+  bottom: 50%;
+  right: $margin-lg;
+  @include translateY(50%);
+  @include transition(transform $duration-md, right $duration-md, bottom $duration-md, max-height $duration-md, max-width $duration-md);
+  width: calc(100% - #{$padding-lg * 2});
+  background-color: transparentize($white, .3);
+  box-shadow: 5px 5px 10px 0 transparentize($black, .7);
+  overflow: auto;
+
+  .card-content {
+    padding: $padding-lg;
+  }
+
+  @include mobile {
+    max-height: calc(100% - #{$burger-height + $padding-lg * 2});
+    max-width: 100%;
+    bottom: $margin-lg;
+    @include translateY(0);
+  }
+}

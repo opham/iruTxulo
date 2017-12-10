@@ -1,0 +1,15 @@
+.frame-movie {
+  @include cover(absolute);
+
+  .frame {
+    display: none;
+    @include cover(absolute);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+
+    &.active {
+      display: block;
+    }
+  }
+}

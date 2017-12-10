@@ -19,7 +19,30 @@ body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+
+  /*
+  *  custom scroll-bar
+  */
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 $padding-sm transparentize($black, .3);
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar {
+    width: $padding-sm;
+    background-color: transparentize($white, .7);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $red;
+    border-radius: $padding-sm;
+  }
 }
+
+h1, h2, h3, h4, h5, h6 {
+  color: $red;
+}
+
 
 li {
   list-style: none;
@@ -28,8 +51,17 @@ li {
 a {
   text-decoration: none;
   color: $red;
-  &:hover {
-    color: $green;
+}
+
+div {
+  p {
+    margin-bottom: $margin-md;
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+    @include mobile {
+      margin-bottom: $margin-sm;
+    }
   }
 }
 
@@ -37,11 +69,53 @@ a {
   > div {
     height: 100%;
   }
+  .route {
+    overflow: hidden;
+    min-height: 100%;
+    min-width: 100%;
+
+    main {
+      transition: padding $duration-md;
+      padding: $padding-md;
+    }
+    .row {
+      display: flex;
+      padding: $padding-md 0;
+
+      &:first-of-type {
+        padding-top: 0;
+      }
+
+      .col {
+        display: flex;
+        padding: 0 $padding-md;
+        flex-direction: column;
+        border-left: 1px solid $red;
+
+        &:first-of-type {
+          border-left: 0;
+          padding-left: 0;
+        }
+        &:last-of-type {
+          padding-right: 0;
+        }
+      }
+    }
+
+    .table {
+      .row {
+        border-bottom: 1px solid $red;
+      }
+    }
+  }
 
 
   @include mobile {
-    .page {
-      padding-top: 50px;
+    .route {
+      overflow-y: auto;
+      main {
+        padding: $burger-height $padding-md $padding-md;
+      }
     }
   }
 }

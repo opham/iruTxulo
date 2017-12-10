@@ -1,20 +1,21 @@
 import React from 'react';
-import {createStore, combineReducers} from 'redux';
+import {createStore, combineReducers, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import thunk from 'redux-thunk';
 import reducers from './reducers';
 
 /* components */
 import Menu from './components/Menu';
 
 /* routes */
-import Home from './routes/Home';
-import About from './routes/About';
-import Visit from './routes/Visit';
+import Home from './routes/Home/Home';
+import About from './routes/About/About';
+import Visit from './routes/Visit/Visit';
 import NoMatch from './routes/NoMatch';
 
 /* Define store */
-const store = createStore(combineReducers({...reducers}));
+const store = createStore(combineReducers({...reducers}), {}, applyMiddleware(thunk));
 
 export default class App extends React.Component {
     render() {

@@ -16,7 +16,11 @@ class NoMatch extends React.Component {
     render() {
         console.info('-->> NoMatch renders', this.props);
         return (
-            <h1>This page doesn`t exist</h1>
+            <div className="no-match route">
+                <main>
+                    <h1>This page doesn`t exist</h1>
+                </main>
+            </div>
         );
     }
 }

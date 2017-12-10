@@ -1,0 +1,19 @@
+.home {
+  position: relative;
+
+  .slider {
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+
+    .slides {
+      height: 100%;
+      .slide {
+        min-width: 100%;
+      }
+    }
+  }
+}

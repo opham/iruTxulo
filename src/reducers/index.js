@@ -1,7 +1,9 @@
-import visit from './visitReducer';
+import visit from './routes/visit.reducer';
+import home from './routes/home.reducer';
 
 const reducers = {
-    visit
+    visit,
+    home
 };
 
 export default reducers;
