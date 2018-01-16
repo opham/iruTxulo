@@ -23,7 +23,7 @@ class Visit extends React.Component {
     // }
 
     componentDidMount() {
-        this.props.getNextFrames(1, 5965);
+        this.props.getNextFrames(0, 312);
     }
 
     render() {

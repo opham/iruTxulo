@@ -11,7 +11,9 @@ class FrameMovie extends React.Component {
         super(props);
 
         this.isLocked = false;
-
+        this.playMovieCRON = null;
+        this.direction = null;
+        this.speed = null;
         this.state = {
             activeIndex: 0,
             frames: this.props.frames || [],
@@ -21,7 +23,6 @@ class FrameMovie extends React.Component {
             // frameActiveRange: 0,
         };
 
-        this.calcVerticalSpeedAndDirection = this.calcVerticalSpeedAndDirection.bind(this);
         this.calcLoadedFramesAndActiveIndex = this.calcLoadedFramesAndActiveIndex.bind(this);
         this.handleScroll = this.handleScroll.bind(this);
     }
@@ -42,37 +43,31 @@ class FrameMovie extends React.Component {
     }
 
     componentWillUnmount() {
+        clearInterval(this.playMovieCRON);
         this.movie.removeEventListener('wheel', this.handleScroll, false);
     }
 
     handleScroll(e) {
-        if (!this.isLocked) {
-            window.requestAnimationFrame(() => {
-                e.preventDefault();
-                console.log(e);
-                const {speed, direction} = this.calcVerticalSpeedAndDirection(e.deltaY);
-                const {newLoadedFrames, newActiveIndex} = this.calcLoadedFramesAndActiveIndex(speed, direction);
-                console.log('>> requestAnimationFrame', speed, direction, newLoadedFrames, newActiveIndex);
-                this.setState({activeIndex: newActiveIndex, loadedFrames: newLoadedFrames}, () => {
-                    this.isLocked = false;
-                });
-            });
-            this.isLocked = true;
-        }
+        window.requestAnimationFrame(() => {
+            console.log(e);
+            const direction = e.deltaY < 0 ? 'up' : 'down';
+            const hasChangedDirection = this.direction === direction;
+            this.direction = direction;
+            this.locked = !hasChangedDirection;
+            if (!this.isLocked) { // means also that scroll has changed direction
+                clearInterval(this.playMovieCRON);
+                this.playMovieCRON = setInterval(() => {
+                    const {newLoadedFrames, newActiveIndex} = this.calcLoadedFramesAndActiveIndex(direction);
+                    // check if we need to clear Interval
+                    this.setState({activeIndex: newActiveIndex, loadedFrames: newLoadedFrames}, () => {
+                        if (this.state.activeIndex >= this.state.frames.length || this.state.activeIndex <= 0) {
+                            clearInterval(this.playMovieCRON);
+                        }
+                    });
+                }, 41); // 1000ms/24 = approx 41ms; for 24fps
+            }
+        });
         return false;
-    }
-
-    calcVerticalSpeedAndDirection(deltaY) {
-        const direction = deltaY < 0 ? 'up' : 'down';
-        let speed = 'slow';
-        speed = deltaY < 100 ? 'slow' : 'medium';
-        speed = deltaY > 300 ? 'fast' : speed;
-        console.log('future speed', speed);
-
-        return {
-            speed: 'slow',
-            direction
-        };
     }
 
     /* calculate slices 'up' and 'down' with the active frame in the middle */
@@ -96,14 +91,22 @@ class FrameMovie extends React.Component {
         let restDown = 0;
 
         if (newActiveIndex - range < 0) {
-            rangeUp = range - newActiveIndex;
+            rangeUp = newActiveIndex;
             restDown = range - rangeUp;
         }
 
         if (newActiveIndex + range > framesLength) {
-            rangeDown = range - newActiveIndex;
-            restUp = range - rangeUp;
+            rangeDown = framesLength - newActiveIndex;
+            restUp = range - rangeDown;
         }
+        // console.group('>> up data', newActiveIndex);
+        // console.log('rangeUp', rangeUp);
+        // console.log('restUp', restUp);
+        // console.groupEnd();
+        // console.group('>> down data', newActiveIndex);
+        // console.log('rangeDown', rangeDown);
+        // console.log('restDown', restDown);
+        // console.groupEnd();
 
         return {
             rangeUp: rangeUp + restUp,
@@ -111,39 +114,15 @@ class FrameMovie extends React.Component {
         };
     }
 
-    calcLoadedFramesAndActiveIndex(speed, direction) {
+    calcLoadedFramesAndActiveIndex(direction) {
         const {frames, activeIndex} = this.state;
         let newActiveIndex = activeIndex;
         const framesLength = frames.length;
 
         if (direction === 'up') {
-            switch (speed) { // calculate new index based on speed
-            case 'slow':
-                newActiveIndex = newActiveIndex - 1 < 0 ? 0 : newActiveIndex - 1;
-                break;
-            case 'medium':
-                newActiveIndex = newActiveIndex - 5 < 0 ? 0 : newActiveIndex - 5;
-                break;
-            case 'high':
-                newActiveIndex = newActiveIndex - 10 < 0 ? 0 : newActiveIndex - 10;
-                break;
-            default:
-                break;
-            }
+            newActiveIndex = newActiveIndex - 1 < 0 ? 0 : newActiveIndex - 1;
         } else { // direction: 'down'
-            switch (speed) {
-            case 'slow':
-                newActiveIndex = newActiveIndex + 1 < framesLength ? newActiveIndex + 1 : framesLength;
-                break;
-            case 'medium':
-                newActiveIndex = newActiveIndex + 5 < framesLength ? newActiveIndex + 5 : framesLength;
-                break;
-            case 'high':
-                newActiveIndex = newActiveIndex + 10 < framesLength ? newActiveIndex + 10 : framesLength;
-                break;
-            default:
-                break;
-            }
+            newActiveIndex = newActiveIndex + 1 < framesLength ? newActiveIndex + 1 : framesLength;
         }
         const slices = this.calcSlices(newActiveIndex);
 
@@ -157,9 +136,20 @@ class FrameMovie extends React.Component {
     }
 
     render() {
-        console.info('-->> FrameMovie renders', this.props);
         const {loadedFrames, activeIndex, frames} = this.state;
+        const {
+            info = {
+                scrollUp: ([<span key="scroll-up" className="icon">scroll up</span>, <span key="scroll-up-text" className="text">rewind Movie</span>]),
+                scrollDown: ([<span key="scroll-down-text" className="text">play Movie</span>, <span key="scroll-down" className="icon">scroll down</span>]),
+                pause: (<span>pause</span>)
+            }
+        } = this.props;
+        const displayInfo = {
+            scrollUp: activeIndex > 0,
+            scrollDown: activeIndex < frames.length,
+        };
         const activeId = frames[activeIndex] ? frames[activeIndex].uid : '';
+        console.info('-->> FrameMovie renders activeId', activeId);
 
         return (
             <div className="frame-movie" ref={(movie) => { this.movie = movie; }}>
@@ -175,6 +165,21 @@ class FrameMovie extends React.Component {
                         </Frame>
                     );
                 })}
+                <div className="info">
+                    {displayInfo.scrollUp ? <div className="scroll-up">{info.scrollUp}</div> : null}
+                    {displayInfo.scrollDown ? <div className="scroll-down">{info.scrollDown}</div> : null}
+                    {displayInfo.pause ?
+                        <button
+                            type="button"
+                            className="btn btn-pause"
+                            onClick={() => { clearInterval(this.playMovieCRON); }}
+                        >
+                            {info.pause}
+                        </button>
+                        :
+                        null
+                    }
+                </div>
             </div>
         );
     }

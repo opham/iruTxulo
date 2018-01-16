@@ -43,6 +43,12 @@ h1, h2, h3, h4, h5, h6 {
   color: $red;
 }
 
+.btn {
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+
 
 li {
   list-style: none;
@@ -84,6 +90,11 @@ div {
 
       &:first-of-type {
         padding-top: 0;
+      }
+
+      &:last-of-type {
+        padding-top: 0;
+        border-bottom: 1px solid $red;
       }
 
       .col {

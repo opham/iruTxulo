@@ -4,22 +4,21 @@ import {appConfiguration} from '../../appConfiguration';
 const {PROTOCOL, SERVER, PORT} = appConfiguration;
 const BASE_URL = `${PROTOCOL}://${SERVER}:${PORT}`;
 
-function getNextFrames(startIndex, range) {
+function getNextFrames(startIndex, framesLength) {
     return (dispatch, getState) => {
         // const state = getState();
-        const maxRequestedNumber = startIndex + range;
+        const maxRequestedNumber = startIndex + framesLength;
         // const framesLength = frames.length;
-        const framesLength = 1127;
         const nextFrames = [];
 
         /* mocked */
-        for (let i = startIndex ? 1 : startIndex; i < framesLength && i <= maxRequestedNumber; i += 1) {
+        for (let i = startIndex; i < framesLength && i <= maxRequestedNumber; i += 1) {
             let state = '';
             const formattedIndex = (`000${i}`).slice(-4);
             state = i === framesLength ? 'end-frame' : `frame-${i}`;
             nextFrames.push({
                 uid: `frame-${i}`,
-                src: `http://localhost:5000/img/frames/img${formattedIndex}.jpg`,
+                src: `${BASE_URL}/img/frames/img${formattedIndex}.jpg`,
                 state
             });
         }
@@ -50,9 +49,9 @@ function getNextFrames(startIndex, range) {
     };
 }
 
-function initData(startIndex, range) {
+function initData(startIndex, framesLength) {
     return (dispatch, getState) => {
-        getNextFrames(startIndex, range);
+        getNextFrames(startIndex, framesLength);
         // const myHeaders = new Headers();
         // const myInit = {
         //     method: 'GET',
